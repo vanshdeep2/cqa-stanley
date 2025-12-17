@@ -18,14 +18,11 @@
           </div>
         </div>
       </div>
-      <div class="nav-label">Main</div>
       <nav class="nav">
         <a class="nav-item active" href="#">
-          <span class="nav-icon">📊</span>
           <span>Dashboard</span>
         </a>
-        <a class="nav-item" href="https://iqcore-dev.azurewebsites.net/agents">
-          <span class="nav-icon">👥</span>
+        <a class="nav-item" href="agents.html">
           <span>Agents</span>
         </a>
       </nav>
@@ -39,7 +36,6 @@
             <div class="user-name">John Manager</div>
             <div class="user-role">QA Supervisor</div>
           </div>
-          <div class="chevron">⌄</div>
         </div>
       </header>
 
@@ -49,7 +45,7 @@
             <h1>Stanley | Weekly Call Quality Insights</h1>
           </div>
           <div class="actions">
-            <button class="btn ghost">Jul 08, 2025 - Aug 05, 2025</button>
+            <button class="btn ghost">Dec 10, 2025 - Dec 17, 2025</button>
             <button class="btn ghost">Refresh</button>
             <button class="btn ghost">Export</button>
           </div>
@@ -64,6 +60,38 @@
             <p>The analysis also revealed that proactive resolution actions—such as offering replacement lids or parts during the first interaction—had a meaningful impact on lowering repeat calls and improving customer confidence.</p>
             <p>From a customer satisfaction perspective, clarity and personalization emerged as key drivers. Customers responded more positively when agents demonstrated clear product context (specific Stanley products owned) and set clear expectations around next steps and delivery timelines.</p>
             <p>Overall, this week’s insights indicate that tighter process adherence and more decisive resolution behaviors directly translate into better customer outcomes for Stanley.</p>
+          </div>
+        </section>
+
+        <section class="card insights-section">
+          <h2>Outcome-Based Insight Explorer</h2>
+          
+          <div class="filter-section">
+            <div class="filter-group">
+              <label class="filter-label">Process Adherence</label>
+              <div class="filter-chips">
+                <button class="filter-chip" data-filter="process" data-value="adhered">Adhered</button>
+                <button class="filter-chip" data-filter="process" data-value="not_adhered">Not Adhered</button>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">Resolution</label>
+              <div class="filter-chips">
+                <button class="filter-chip" data-filter="resolution" data-value="met">Met</button>
+                <button class="filter-chip" data-filter="resolution" data-value="not_met">Not Met</button>
+              </div>
+            </div>
+            <div class="filter-group">
+              <label class="filter-label">CSAT</label>
+              <div class="filter-chips">
+                <button class="filter-chip" data-filter="csat" data-value="positive">Positive</button>
+                <button class="filter-chip" data-filter="csat" data-value="negative">Negative</button>
+              </div>
+            </div>
+          </div>
+
+          <div id="outcomeInsightsContainer" class="insight-grid">
+            <!-- Outcome insights will be rendered here -->
           </div>
         </section>
 
@@ -290,6 +318,130 @@
           }
         }
       });
+    })();
+
+    // Outcome-Based Insight Explorer
+    (function() {
+      const outcomeInsights = [
+        {
+          id: '1',
+          title: 'Process Adhered | Resolution Met | CSAT Positive',
+          insight: 'When agents correctly identified the customer\'s Stanley product variant and followed the full troubleshooting SOP, issues were resolved quickly and customers left the call confident in both the product and the support experience.',
+          rootCause: 'Agents followed Stanley\'s SOP end-to-end, including confirming bottle size and lid type before guiding the customer. Customers verbally acknowledged clarity with phrases like "Oh, I see the notch now" and "It clicked properly this time." Because Stanley products have subtle design differences across models, accurate identification combined with structured guidance eliminated ambiguity and led to strong outcomes.',
+          tags: { process: 'adhered', resolution: 'met', csat: 'positive' }
+        },
+        {
+          id: '2',
+          title: 'Process Adhered | Resolution Met | CSAT Negative',
+          insight: 'Even when Stanley issues were resolved through correct SOP execution, customer satisfaction dropped when the interaction felt effort-heavy or overly procedural.',
+          rootCause: 'Customers said "I wish I\'d known this earlier" and "This took longer than expected." Although agents followed SOPs correctly, they did not sufficiently acknowledge the inconvenience or explain why certain Stanley lids or seals behave this way, leading to emotional dissatisfaction despite resolution.',
+          tags: { process: 'adhered', resolution: 'met', csat: 'negative' }
+        },
+        {
+          id: '3',
+          title: 'Process Adhered | Resolution Not Met | CSAT Negative',
+          insight: 'Strict SOP adherence did not resolve recurring Stanley lid and handle issues when underlying wear-and-tear was present.',
+          rootCause: 'Customers stated "I followed everything, but it still leaks." Stanley products are often used daily and exposed to heat, drops, and dishwasher cycles, which can degrade seals or stress handles. Existing SOPs focused on adjustment rather than escalation to replacement, resulting in unresolved calls and frustration.',
+          tags: { process: 'adhered', resolution: 'not_met', csat: 'negative' }
+        },
+        {
+          id: '4',
+          title: 'Process Adhered | Resolution Not Met | CSAT Positive',
+          insight: 'Customers remained satisfied even without immediate resolution when agents clearly explained Stanley product limitations and next steps.',
+          rootCause: 'Agents followed SOPs and transparently explained replacement eligibility and timelines. Customers responded positively with statements like "At least I understand why this can\'t be fixed right now." Clear communication and expectation setting preserved trust despite delayed resolution.',
+          tags: { process: 'adhered', resolution: 'not_met', csat: 'positive' }
+        },
+        {
+          id: '5',
+          title: 'Process Not Adhered | Resolution Met | CSAT Positive',
+          insight: 'Bypassing diagnostics and proactively offering replacements led to faster resolution and higher satisfaction for known Stanley product issues.',
+          rootCause: 'Experienced agents skipped troubleshooting steps and immediately offered replacement lids or parts. Customers said "I\'m glad you didn\'t make me try everything again." Because many Stanley customers had already attempted basic fixes, proactive replacement reduced effort and aligned better with expectations, even though SOP adherence was low.',
+          tags: { process: 'not_adhered', resolution: 'met', csat: 'positive' }
+        },
+        {
+          id: '6',
+          title: 'Process Not Adhered | Resolution Met | CSAT Negative',
+          insight: 'Resolution without structured explanation reduced customer confidence in Stanley product reliability.',
+          rootCause: 'Customers said "I guess it\'s fixed?" or "I\'m not sure what actually happened." Agents resolved the issue but failed to explain the cause or confirm prevention of recurrence, leading to uncertainty and lower CSAT despite technical resolution.',
+          tags: { process: 'not_adhered', resolution: 'met', csat: 'negative' }
+        },
+        {
+          id: '7',
+          title: 'Process Not Adhered | Resolution Not Met | CSAT Negative',
+          insight: 'Calls without process adherence or resolution resulted in the poorest customer outcomes.',
+          rootCause: 'Customers said "I\'ve already called about this" and "No one seems to know how this Stanley lid works." Lack of structured guidance, missed diagnostics, and lack of ownership compounded frustration and drove repeat contacts.',
+          tags: { process: 'not_adhered', resolution: 'not_met', csat: 'negative' }
+        },
+        {
+          id: '8',
+          title: 'Process Not Adhered | Resolution Not Met | CSAT Positive',
+          insight: 'Strong agent ownership preserved customer goodwill even when Stanley issues were unresolved.',
+          rootCause: 'Customers responded positively to statements like "I\'ll personally follow up on this." Despite skipped SOPs and unresolved issues, accountability and ownership compensated for system limitations and maintained trust.',
+          tags: { process: 'not_adhered', resolution: 'not_met', csat: 'positive' }
+        }
+      ];
+
+      let activeFilters = {
+        process: 'adhered',
+        resolution: 'met',
+        csat: 'positive'
+      };
+
+      const container = document.getElementById('outcomeInsightsContainer');
+      if (!container) return;
+
+      function renderInsights() {
+        const filtered = outcomeInsights.filter(insight =>
+          (!activeFilters.process || insight.tags.process === activeFilters.process) &&
+          (!activeFilters.resolution || insight.tags.resolution === activeFilters.resolution) &&
+          (!activeFilters.csat || insight.tags.csat === activeFilters.csat)
+        );
+
+        if (filtered.length === 0) {
+          container.innerHTML = '<div class="empty-state">No insights match this outcome combination for the selected period.</div>';
+          return;
+        }
+
+        container.innerHTML = filtered.map(insight => `
+          <article class="insight-card">
+            <h3>${insight.title}</h3>
+            <p class="insight-text">${insight.insight}</p>
+            <div class="insight-block">
+              <p class="block-title">Root Cause</p>
+              <p>${insight.rootCause}</p>
+            </div>
+          </article>
+        `).join('');
+      }
+
+      // Set default active filter chips
+      document.querySelectorAll('.filter-chip').forEach(chip => {
+        const filterType = chip.dataset.filter;
+        const value = chip.dataset.value;
+        if (activeFilters[filterType] === value) {
+          chip.classList.add('active');
+        }
+      });
+
+      document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.addEventListener('click', function() {
+          const filterType = this.dataset.filter;
+          const value = this.dataset.value;
+          
+          if (activeFilters[filterType] === value) {
+            activeFilters[filterType] = null;
+            this.classList.remove('active');
+          } else {
+            document.querySelectorAll(`[data-filter="${filterType}"]`).forEach(c => c.classList.remove('active'));
+            activeFilters[filterType] = value;
+            this.classList.add('active');
+          }
+          
+          renderInsights();
+        });
+      });
+
+      renderInsights();
     })();
   </script>
 </body>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IQ-Core | Agents</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="page">
+    <aside class="sidebar">
+      <div class="logo-area">
+        <div class="logo-block">
+          <div class="logo-icon">IQ</div>
+          <div class="logo-text">
+            <div class="logo-title">IQ-Core</div>
+            <div class="logo-sub">QA Analytics</div>
+          </div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a class="nav-item" href="index.html">
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-item active" href="#">
+          <span>Agents</span>
+        </a>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="user">
+          <div class="avatar">JM</div>
+          <div class="user-meta">
+            <div class="user-name">John Manager</div>
+            <div class="user-role">QA Supervisor</div>
+          </div>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="page-header">
+          <div>
+            <h1>Stanley | Agent Performance</h1>
+          </div>
+          <div class="actions">
+            <button class="btn ghost">Dec 10, 2025 - Dec 17, 2025</button>
+            <button class="btn ghost">Refresh</button>
+            <button class="btn ghost">Export</button>
+          </div>
+        </div>
+
+        <section class="card summary-card">
+          <div class="card-header">
+            <h2>Agent Performance Summary</h2>
+          </div>
+          <div class="summary-body">
+            <p>This view evaluates individual Stanley customer support agents based on the outcomes they deliver across Process Adherence, Issue Resolution, and Customer Satisfaction (CSAT).</p>
+            <p>Instead of static QA scores, agent performance is understood through outcome patterns that explain why customers have different experiences with similar Stanley product issues.</p>
+            <p>Over the past week, agents demonstrated strong overall process adherence, consistently following recommended troubleshooting steps for common issues like lid leaks and handle stability. However, outcomes varied based on how agents adapted these processes.</p>
+            <p>Agents who combined Standard Operating Procedure (SOP) adherence with proactive resolution actions (e.g., offering timely replacements or clearly explaining next steps) achieved higher resolution rates and stronger customer satisfaction. In contrast, calls involving repeat or wear-related Stanley product issues showed lower resolution effectiveness when agents relied solely on procedural troubleshooting without escalation.</p>
+            <p>Customer satisfaction was highest when agents clearly set expectations, confirmed resolution, and demonstrated ownership, even if immediate resolution wasn't possible. These patterns indicate clear opportunities for targeted coaching and SOP refinement to improve consistency across the team.</p>
+          </div>
+        </section>
+
+        <div id="agentsContainer" class="agents-grid">
+          <!-- Agent cards will be rendered here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const agents = [
+        {
+          name: 'Sarah Mitchell',
+          processAdherence: 92,
+          resolutionRate: 81,
+          positiveCSAT: 78,
+          insight: 'Sarah consistently follows Stanley SOPs and resolves most issues, but CSAT dips when calls involve repeat lid-related problems.',
+          rootCause: 'Customers calling about recurring Stanley lid leaks often say "I\'ve already tried this before". While Sarah follows SOPs precisely, she delays replacement offers, leading to frustration even when issues are eventually resolved.'
+        },
+        {
+          name: 'Daniel Reyes',
+          processAdherence: 68,
+          resolutionRate: 85,
+          positiveCSAT: 88,
+          insight: 'Daniel achieves strong outcomes by prioritizing fast resolution over strict process adherence.',
+          rootCause: 'Daniel frequently skips diagnostics and proactively offers replacement lids or handles for known Stanley issues. Customers respond positively with comments like "That was much easier than expected", though SOP adherence is low.'
+        },
+        {
+          name: 'Priya Nair',
+          processAdherence: 90,
+          resolutionRate: 72,
+          positiveCSAT: 82,
+          insight: 'Priya maintains customer trust even when immediate resolution is not possible.',
+          rootCause: 'Priya clearly explains Stanley product limitations and replacement timelines. Customers often say "Thanks for explaining how replacements work", resulting in positive CSAT despite unresolved calls.'
+        },
+        {
+          name: 'James O\'Connor',
+          processAdherence: 75,
+          resolutionRate: 70,
+          positiveCSAT: 65,
+          insight: 'James struggles with complex Stanley product issues that require deeper diagnostics.',
+          rootCause: 'Calls involving handle instability or seal wear often remain unresolved. Customers express confusion with statements like "I\'m not sure what to try next", indicating missed explanations and incomplete guidance.'
+        },
+        {
+          name: 'Aisha Khan',
+          processAdherence: 88,
+          resolutionRate: 79,
+          positiveCSAT: 91,
+          insight: 'Aisha delivers consistently positive customer experiences across most Stanley product issues.',
+          rootCause: 'Aisha balances SOP adherence with reassurance and confirmation. Customers frequently say "That makes sense now" and "I feel confident using it again", reflecting strong trust-building behavior.'
+        },
+        {
+          name: 'Mark Thompson',
+          processAdherence: 82,
+          resolutionRate: 68,
+          positiveCSAT: 60,
+          insight: 'Mark resolves fewer issues and struggles to manage customer expectations.',
+          rootCause: 'Customers often ask "Will this happen again?" or "When should I call back?". Mark resolves issues inconsistently and does not clearly explain long-term reliability of Stanley products, impacting CSAT.'
+        },
+        {
+          name: 'Neha Sharma',
+          processAdherence: 95,
+          resolutionRate: 74,
+          positiveCSAT: 76,
+          insight: 'Neha is highly compliant but less outcome-driven in recurring issue scenarios.',
+          rootCause: 'Neha strictly follows SOPs even when customers describe repeated Stanley lid failures. Lack of escalation to replacement results in unresolved outcomes despite high adherence.'
+        },
+        {
+          name: 'Luis Fernandez',
+          processAdherence: 64,
+          resolutionRate: 80,
+          positiveCSAT: 84,
+          insight: 'Luis performs well with experienced Stanley customers but less so with first-time users.',
+          rootCause: 'Luis assumes product familiarity and skips foundational explanations. New customers say "I didn\'t know it was supposed to work that way", affecting clarity but not always resolution.'
+        },
+        {
+          name: 'Emily Carter',
+          processAdherence: 86,
+          resolutionRate: 83,
+          positiveCSAT: 89,
+          insight: 'Emily excels at turning potentially negative Stanley experiences into positive ones.',
+          rootCause: 'Emily proactively confirms resolution and sets expectations. Customers say "I feel much better about this now", indicating strong closure and reassurance behaviors.'
+        },
+        {
+          name: 'Rahul Verma',
+          processAdherence: 71,
+          resolutionRate: 66,
+          positiveCSAT: 58,
+          insight: 'Rahul shows inconsistent outcomes across similar Stanley issues.',
+          rootCause: 'Rahul alternates between strict SOP use and ad-hoc fixes. Customers experience variability, often saying "Last time I was told something different", reducing confidence and satisfaction.'
+        }
+      ];
+
+      const container = document.getElementById('agentsContainer');
+      if (!container) return;
+
+      container.innerHTML = agents.map(agent => {
+        return `
+          <article class="card agent-card">
+            <div class="agent-header">
+              <h3>${agent.name}</h3>
+            </div>
+            <div class="performance-overview">
+              <h4 class="overview-title">PERFORMANCE OVERVIEW</h4>
+              <div class="overview-metrics">
+                <div class="overview-metric">
+                  <div class="metric-header">
+                    <span class="metric-name">Process Adherence</span>
+                    <span class="metric-badge">${agent.processAdherence}%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill process" style="width: ${agent.processAdherence}%"></div>
+                  </div>
+                </div>
+                <div class="overview-metric">
+                  <div class="metric-header">
+                    <span class="metric-name">Resolution Rate</span>
+                    <span class="metric-badge">${agent.resolutionRate}%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill resolution" style="width: ${agent.resolutionRate}%"></div>
+                  </div>
+                </div>
+                <div class="overview-metric">
+                  <div class="metric-header">
+                    <span class="metric-name">Positive CSAT</span>
+                    <span class="metric-badge">${agent.positiveCSAT}%</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill csat" style="width: ${agent.positiveCSAT}%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="insight-block">
+              <p class="block-title">Agent Insight</p>
+              <p>${agent.insight}</p>
+            </div>
+            <div class="insight-block">
+              <p class="block-title">Root Cause</p>
+              <p>${agent.rootCause}</p>
+            </div>
+          </article>
+        `;
+      }).join('');
+    })();
+  </script>
+</body>
+</html>
+
