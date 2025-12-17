@@ -64,36 +64,82 @@
         </section>
 
         <section class="card insights-section">
-          <h2>Outcome-Based Insight Explorer</h2>
+          <h2>CSAT × Outcome Diagnostic Matrix</h2>
           
-          <div class="filter-section">
-            <div class="filter-group">
-              <label class="filter-label">Process Adherence</label>
-              <div class="filter-chips">
-                <button class="filter-chip" data-filter="process" data-value="adhered">Adhered</button>
-                <button class="filter-chip" data-filter="process" data-value="not_adhered">Not Adhered</button>
+          <div class="matrix-container">
+            <div class="matrix-table">
+              <div class="matrix-header">
+                <div class="matrix-cell header-cell"></div>
+                <div class="matrix-cell header-cell header-positive">Positive<br><span class="header-sub">(8-10)</span></div>
+                <div class="matrix-cell header-cell header-neutral">Neutral<br><span class="header-sub">(5-7)</span></div>
+                <div class="matrix-cell header-cell header-negative">Negative<br><span class="header-sub">(&lt;5)</span></div>
+              </div>
+              <div class="matrix-row">
+                <div class="matrix-cell row-label">Resolution Achieved<br>+ Process Followed</div>
+                <div class="matrix-cell" data-csat="positive" data-resolution="achieved" data-process="followed">
+                  <span class="cell-percentage" id="cell-1">18%</span>
+                </div>
+                <div class="matrix-cell" data-csat="neutral" data-resolution="achieved" data-process="followed">
+                  <span class="cell-percentage" id="cell-2">8%</span>
+                </div>
+                <div class="matrix-cell" data-csat="negative" data-resolution="achieved" data-process="followed">
+                  <span class="cell-percentage" id="cell-3">5%</span>
+                </div>
+              </div>
+              <div class="matrix-row">
+                <div class="matrix-cell row-label">Resolution Not Achieved<br>+ Process Followed</div>
+                <div class="matrix-cell" data-csat="positive" data-resolution="not_achieved" data-process="followed">
+                  <span class="cell-percentage" id="cell-4">6%</span>
+                </div>
+                <div class="matrix-cell" data-csat="neutral" data-resolution="not_achieved" data-process="followed">
+                  <span class="cell-percentage" id="cell-5">7%</span>
+                </div>
+                <div class="matrix-cell" data-csat="negative" data-resolution="not_achieved" data-process="followed">
+                  <span class="cell-percentage" id="cell-6">12%</span>
+                </div>
+              </div>
+              <div class="matrix-row">
+                <div class="matrix-cell row-label">Resolution Achieved<br>+ Process Not Followed</div>
+                <div class="matrix-cell" data-csat="positive" data-resolution="achieved" data-process="not_followed">
+                  <span class="cell-percentage" id="cell-7">15%</span>
+                </div>
+                <div class="matrix-cell" data-csat="neutral" data-resolution="achieved" data-process="not_followed">
+                  <span class="cell-percentage" id="cell-8">6%</span>
+                </div>
+                <div class="matrix-cell" data-csat="negative" data-resolution="achieved" data-process="not_followed">
+                  <span class="cell-percentage" id="cell-9">4%</span>
+                </div>
+              </div>
+              <div class="matrix-row">
+                <div class="matrix-cell row-label">Resolution Not Achieved<br>+ Process Not Followed</div>
+                <div class="matrix-cell" data-csat="positive" data-resolution="not_achieved" data-process="not_followed">
+                  <span class="cell-percentage" id="cell-10">2%</span>
+                </div>
+                <div class="matrix-cell" data-csat="neutral" data-resolution="not_achieved" data-process="not_followed">
+                  <span class="cell-percentage" id="cell-11">3%</span>
+                </div>
+                <div class="matrix-cell" data-csat="negative" data-resolution="not_achieved" data-process="not_followed">
+                  <span class="cell-percentage" id="cell-12">14%</span>
+                </div>
               </div>
             </div>
-            <div class="filter-group">
-              <label class="filter-label">Resolution</label>
-              <div class="filter-chips">
-                <button class="filter-chip" data-filter="resolution" data-value="met">Met</button>
-                <button class="filter-chip" data-filter="resolution" data-value="not_met">Not Met</button>
-              </div>
-            </div>
-            <div class="filter-group">
-              <label class="filter-label">CSAT</label>
-              <div class="filter-chips">
-                <button class="filter-chip" data-filter="csat" data-value="positive">Positive</button>
-                <button class="filter-chip" data-filter="csat" data-value="negative">Negative</button>
-              </div>
-            </div>
-          </div>
-
-          <div id="outcomeInsightsContainer" class="insight-grid">
-            <!-- Outcome insights will be rendered here -->
           </div>
         </section>
+
+        <!-- Matrix Stats Modal -->
+        <div id="diagnosticModal" class="modal">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h2 id="modalTitle">Matrix Cell Details</h2>
+              <button class="modal-close" id="closeDiagnosticModal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div id="diagnosticSection" class="diagnostic-content">
+                <!-- Stats content will be rendered here -->
+              </div>
+            </div>
+          </div>
+        </div>
 
         <section class="stats">
           <div class="stat-card">
@@ -320,128 +366,334 @@
       });
     })();
 
-    // Outcome-Based Insight Explorer
+    // CSAT × Outcome Diagnostic Matrix
     (function() {
-      const outcomeInsights = [
-        {
-          id: '1',
-          title: 'Process Adhered | Resolution Met | CSAT Positive',
-          insight: 'When agents correctly identified the customer\'s Stanley product variant and followed the full troubleshooting SOP, issues were resolved quickly and customers left the call confident in both the product and the support experience.',
-          rootCause: 'Agents followed Stanley\'s SOP end-to-end, including confirming bottle size and lid type before guiding the customer. Customers verbally acknowledged clarity with phrases like "Oh, I see the notch now" and "It clicked properly this time." Because Stanley products have subtle design differences across models, accurate identification combined with structured guidance eliminated ambiguity and led to strong outcomes.',
-          tags: { process: 'adhered', resolution: 'met', csat: 'positive' }
+      const scenarioData = {
+        'positive-achieved-followed': {
+          whyCSAT: 'Customers received clear, step-by-step guidance tailored to their specific Stanley product variant. Resolution was achieved on the first call, and agents confirmed successful usage, leaving customers confident in both the product and support experience.',
+          contactingAbout: 'Lid alignment and sealing issues, first-time usage clarification',
+          productTypes: 'Stanley Quencher H2.0 FlowState Tumblers, Stanley Classic Legendary Bottles, Stanley Adventure Quencher Travel Tumblers',
+          couldBeBetter: 'Minimal improvement needed, though proactive tips for long-term care could further reduce repeat contacts.',
+          contactCentreActions: [
+            'Reinforce best-practice call flows',
+            'Add post-resolution care tips to scripts',
+            'Surface these calls as training exemplars'
+          ],
+          preventionActions: [
+            'Include care instructions in product packaging',
+            'Create self-service video guides for common lid issues',
+            'Add product care tips to Stanley website'
+          ]
         },
-        {
-          id: '2',
-          title: 'Process Adhered | Resolution Met | CSAT Negative',
-          insight: 'Even when Stanley issues were resolved through correct SOP execution, customer satisfaction dropped when the interaction felt effort-heavy or overly procedural.',
-          rootCause: 'Customers said "I wish I\'d known this earlier" and "This took longer than expected." Although agents followed SOPs correctly, they did not sufficiently acknowledge the inconvenience or explain why certain Stanley lids or seals behave this way, leading to emotional dissatisfaction despite resolution.',
-          tags: { process: 'adhered', resolution: 'met', csat: 'negative' }
+        'neutral-achieved-followed': {
+          whyCSAT: 'Customers received correct resolution through proper SOP execution, but the interaction felt somewhat mechanical. While issues were resolved, customers did not feel fully reassured about long-term product reliability.',
+          contactingAbout: 'Handle stability questions, seal wear concerns, replacement part inquiries',
+          productTypes: 'Stanley Classic Legendary Bottles, Stanley Adventure Quencher Travel Tumblers, older Stanley Master Series products',
+          couldBeBetter: 'Agents could add more reassurance about product durability and provide clearer long-term care guidance.',
+          contactCentreActions: [
+            'Train agents on reassurance techniques',
+            'Add durability messaging to call scripts',
+            'Provide product care guidance resources'
+          ],
+          preventionActions: [
+            'Create durability information on product pages',
+            'Develop care guides for different Stanley models',
+            'Add FAQ section addressing common wear concerns'
+          ]
         },
-        {
-          id: '3',
-          title: 'Process Adhered | Resolution Not Met | CSAT Negative',
-          insight: 'Strict SOP adherence did not resolve recurring Stanley lid and handle issues when underlying wear-and-tear was present.',
-          rootCause: 'Customers stated "I followed everything, but it still leaks." Stanley products are often used daily and exposed to heat, drops, and dishwasher cycles, which can degrade seals or stress handles. Existing SOPs focused on adjustment rather than escalation to replacement, resulting in unresolved calls and frustration.',
-          tags: { process: 'adhered', resolution: 'not_met', csat: 'negative' }
+        'negative-achieved-followed': {
+          whyCSAT: 'Even when Stanley issues were resolved through correct SOP execution, customer satisfaction dropped when the interaction felt effort-heavy or overly procedural. Customers felt frustrated by the process despite successful resolution.',
+          contactingAbout: 'Repeat lid leaks, seal wear due to daily usage, multiple troubleshooting attempts',
+          productTypes: 'Stanley Classic Legendary Bottles, Stanley Adventure Quencher Travel Tumblers, Stanley Master Series products',
+          couldBeBetter: 'Agents should acknowledge customer effort and frustration earlier in the call, and explain why certain steps are necessary for Stanley products.',
+          contactCentreActions: [
+            'Train agents to acknowledge customer effort',
+            'Add empathy checkpoints throughout SOPs',
+            'Provide scripts that explain "why" behind each step'
+          ],
+          preventionActions: [
+            'Update product documentation to explain common issues',
+            'Create troubleshooting flowcharts for self-service',
+            'Improve product design to reduce common failure points'
+          ]
         },
-        {
-          id: '4',
-          title: 'Process Adhered | Resolution Not Met | CSAT Positive',
-          insight: 'Customers remained satisfied even without immediate resolution when agents clearly explained Stanley product limitations and next steps.',
-          rootCause: 'Agents followed SOPs and transparently explained replacement eligibility and timelines. Customers responded positively with statements like "At least I understand why this can\'t be fixed right now." Clear communication and expectation setting preserved trust despite delayed resolution.',
-          tags: { process: 'adhered', resolution: 'not_met', csat: 'positive' }
+        'positive-not_achieved-followed': {
+          whyCSAT: 'Customers remained satisfied even without immediate resolution when agents clearly explained Stanley product limitations and next steps. Transparent communication about replacement eligibility and timelines preserved trust.',
+          contactingAbout: 'Wear-related seal failures, handle attachment issues, replacement eligibility questions',
+          productTypes: 'Stanley Classic Legendary Bottles, Stanley Master Series products, older Stanley Adventure Quencher Travel Tumblers',
+          couldBeBetter: 'Earlier identification of replacement-eligible issues could reduce call duration while maintaining satisfaction.',
+          contactCentreActions: [
+            'Create quick-reference guide for replacement eligibility',
+            'Train agents to identify replacement scenarios faster',
+            'Streamline replacement authorization process'
+          ],
+          preventionActions: [
+            'Clarify warranty and replacement policies on website',
+            'Create self-service replacement request portal',
+            'Improve product durability to reduce wear-related failures'
+          ]
         },
-        {
-          id: '5',
-          title: 'Process Not Adhered | Resolution Met | CSAT Positive',
-          insight: 'Bypassing diagnostics and proactively offering replacements led to faster resolution and higher satisfaction for known Stanley product issues.',
-          rootCause: 'Experienced agents skipped troubleshooting steps and immediately offered replacement lids or parts. Customers said "I\'m glad you didn\'t make me try everything again." Because many Stanley customers had already attempted basic fixes, proactive replacement reduced effort and aligned better with expectations, even though SOP adherence was low.',
-          tags: { process: 'not_adhered', resolution: 'met', csat: 'positive' }
+        'neutral-not_achieved-followed': {
+          whyCSAT: 'Customers understood why resolution wasn\'t immediate, but felt uncertain about next steps. While agents followed SOPs correctly, clearer communication about timelines and follow-up processes would improve satisfaction.',
+          contactingAbout: 'Complex handle repairs, custom replacement parts, warranty claim processing',
+          productTypes: 'Stanley Master Series products, Stanley Classic Legendary Bottles, custom Stanley Adventure Quencher Travel Tumblers',
+          couldBeBetter: 'Agents could provide more specific timelines and clearer follow-up communication expectations.',
+          contactCentreActions: [
+            'Provide agents with accurate timeline estimates',
+            'Set up automated follow-up communication',
+            'Create clear escalation paths for complex cases'
+          ],
+          preventionActions: [
+            'Improve parts availability and inventory management',
+            'Create online warranty claim submission',
+            'Develop faster replacement processing workflows'
+          ]
         },
-        {
-          id: '6',
-          title: 'Process Not Adhered | Resolution Met | CSAT Negative',
-          insight: 'Resolution without structured explanation reduced customer confidence in Stanley product reliability.',
-          rootCause: 'Customers said "I guess it\'s fixed?" or "I\'m not sure what actually happened." Agents resolved the issue but failed to explain the cause or confirm prevention of recurrence, leading to uncertainty and lower CSAT despite technical resolution.',
-          tags: { process: 'not_adhered', resolution: 'met', csat: 'negative' }
+        'negative-not_achieved-followed': {
+          whyCSAT: 'Although agents followed SOPs, recurring Stanley product wear issues were not resolved. Customers felt frustrated repeating steps they had already tried, leading to dissatisfaction despite proper process adherence.',
+          contactingAbout: 'Repeat lid leaks, seal wear due to daily usage, persistent issues',
+          productTypes: 'Stanley Classic Legendary Bottles, Stanley Adventure Quencher Travel Tumblers, older Stanley Master Series products',
+          couldBeBetter: 'Earlier escalation to replacement and acknowledgment of repeat contact history would improve outcomes.',
+          contactCentreActions: [
+            'Update SOPs to fast-track replacement after repeat failure',
+            'Flag repeat callers automatically in CRM',
+            'Improve replacement eligibility guidance for agents'
+          ],
+          preventionActions: [
+            'Identify and address common product failure patterns',
+            'Improve product durability testing',
+            'Create proactive replacement program for known issues'
+          ]
         },
-        {
-          id: '7',
-          title: 'Process Not Adhered | Resolution Not Met | CSAT Negative',
-          insight: 'Calls without process adherence or resolution resulted in the poorest customer outcomes.',
-          rootCause: 'Customers said "I\'ve already called about this" and "No one seems to know how this Stanley lid works." Lack of structured guidance, missed diagnostics, and lack of ownership compounded frustration and drove repeat contacts.',
-          tags: { process: 'not_adhered', resolution: 'not_met', csat: 'negative' }
+        'positive-achieved-not_followed': {
+          whyCSAT: 'Bypassing diagnostics and proactively offering replacements led to faster resolution and higher satisfaction for known Stanley product issues. Customers appreciated the efficiency and felt valued.',
+          contactingAbout: 'Known lid defects, handle issues, replacement requests for common problems',
+          productTypes: 'Stanley Quencher H2.0 FlowState Tumblers, Stanley Classic Legendary Bottles, Stanley Adventure Quencher Travel Tumblers',
+          couldBeBetter: 'While effective, this approach should be balanced with ensuring diagnostic steps are followed when necessary to prevent unnecessary replacements.',
+          contactCentreActions: [
+            'Document when proactive replacement is appropriate',
+            'Create decision trees for replacement vs. troubleshooting',
+            'Train agents on when to skip vs. follow diagnostics'
+          ],
+          preventionActions: [
+            'Identify and fix known product defects proactively',
+            'Create self-service replacement portal for common issues',
+            'Improve quality control to reduce defect rates'
+          ]
         },
-        {
-          id: '8',
-          title: 'Process Not Adhered | Resolution Not Met | CSAT Positive',
-          insight: 'Strong agent ownership preserved customer goodwill even when Stanley issues were unresolved.',
-          rootCause: 'Customers responded positively to statements like "I\'ll personally follow up on this." Despite skipped SOPs and unresolved issues, accountability and ownership compensated for system limitations and maintained trust.',
-          tags: { process: 'not_adhered', resolution: 'not_met', csat: 'positive' }
+        'neutral-achieved-not_followed': {
+          whyCSAT: 'Issues were resolved quickly, but customers felt uncertain about whether the solution would last. Without structured explanation, confidence in product reliability was reduced.',
+          contactingAbout: 'Quick lid adjustments, handle tightening, basic seal fixes',
+          productTypes: 'Stanley Quencher H2.0 FlowState Tumblers, Stanley Classic Legendary Bottles, Stanley Adventure Quencher Travel Tumblers',
+          couldBeBetter: 'Agents should explain what was done and why, even when skipping full diagnostics, to build customer confidence.',
+          contactCentreActions: [
+            'Require brief explanation even for quick fixes',
+            'Add confirmation steps to all resolutions',
+            'Train agents on building confidence through explanation'
+          ],
+          preventionActions: [
+            'Create video guides showing common quick fixes',
+            'Develop self-service troubleshooting tools',
+            'Improve product design to reduce need for adjustments'
+          ]
+        },
+        'negative-achieved-not_followed': {
+          whyCSAT: 'Resolution without structured explanation reduced customer confidence in Stanley product reliability. Customers felt uncertain about what actually happened and whether the issue would recur.',
+          contactingAbout: 'Lid leaks, seal issues, handle problems that were "fixed" but not explained',
+          productTypes: 'Stanley Quencher H2.0 FlowState Tumblers, Stanley Classic Legendary Bottles, Stanley Adventure Quencher Travel Tumblers',
+          couldBeBetter: 'Agents must explain the cause and confirm prevention of recurrence, even when resolution is quick.',
+          contactCentreActions: [
+            'Enforce explanation requirement for all resolutions',
+            'Add structured wrap-up checklist',
+            'Train agents on building confidence through clarity'
+          ],
+          preventionActions: [
+            'Improve product reliability to reduce recurring issues',
+            'Create clear product care instructions',
+            'Develop better diagnostic tools for agents'
+          ]
+        },
+        'positive-not_achieved-not_followed': {
+          whyCSAT: 'Strong agent ownership and personal commitment preserved customer goodwill even when Stanley issues were unresolved. Customers responded positively to accountability and follow-through promises.',
+          contactingAbout: 'Complex custom issues, rare product problems, cases requiring manufacturer escalation',
+          productTypes: 'Stanley Master Series products, custom Stanley Classic Legendary Bottles, limited edition Stanley Adventure Quencher Travel Tumblers',
+          couldBeBetter: 'While ownership is positive, agents should still follow basic diagnostic steps to ensure all options are explored.',
+          contactCentreActions: [
+            'Balance ownership with process adherence',
+            'Create escalation paths that maintain ownership',
+            'Train agents on when to escalate vs. continue troubleshooting'
+          ],
+          preventionActions: [
+            'Improve product quality to reduce rare issues',
+            'Create better escalation processes',
+            'Develop specialized support for complex cases'
+          ]
+        },
+        'neutral-not_achieved-not_followed': {
+          whyCSAT: 'Customers appreciated agent effort and ownership, but felt uncertain about outcomes. Without clear process or resolution, satisfaction remained neutral despite positive agent behavior.',
+          contactingAbout: 'Unusual product issues, compatibility questions, cases requiring research',
+          productTypes: 'Stanley Master Series products, Stanley Classic Legendary Bottles, Stanley Adventure Quencher Travel Tumblers',
+          couldBeBetter: 'Agents should combine ownership with structured follow-up and clear communication about next steps.',
+          contactCentreActions: [
+            'Create structured follow-up processes',
+            'Provide agents with research resources',
+            'Establish clear escalation timelines'
+          ],
+          preventionActions: [
+            'Improve product documentation',
+            'Create comprehensive FAQ database',
+            'Develop better product compatibility guides'
+          ]
+        },
+        'negative-not_achieved-not_followed': {
+          whyCSAT: 'Calls without process adherence or resolution resulted in the poorest customer outcomes. Lack of structured guidance, missed diagnostics, and lack of ownership compounded frustration.',
+          contactingAbout: 'Repeat calls about same issues, unresolved lid problems, handle failures, seal leaks',
+          productTypes: 'Stanley Quencher H2.0 FlowState Tumblers, Stanley Classic Legendary Bottles, Stanley Adventure Quencher Travel Tumblers',
+          couldBeBetter: 'Agents must follow basic diagnostic processes and take ownership of outcomes, even when resolution isn\'t immediate.',
+          contactCentreActions: [
+            'Enforce minimum diagnostic requirements',
+            'Require ownership and follow-up commitments',
+            'Provide intensive coaching on process adherence'
+          ],
+          preventionActions: [
+            'Identify root causes of repeat contacts',
+            'Improve product reliability',
+            'Create better self-service options to reduce call volume'
+          ]
         }
-      ];
-
-      let activeFilters = {
-        process: 'adhered',
-        resolution: 'met',
-        csat: 'positive'
       };
 
-      const container = document.getElementById('outcomeInsightsContainer');
-      if (!container) return;
-
-      function renderInsights() {
-        const filtered = outcomeInsights.filter(insight =>
-          (!activeFilters.process || insight.tags.process === activeFilters.process) &&
-          (!activeFilters.resolution || insight.tags.resolution === activeFilters.resolution) &&
-          (!activeFilters.csat || insight.tags.csat === activeFilters.csat)
-        );
-
-        if (filtered.length === 0) {
-          container.innerHTML = '<div class="empty-state">No insights match this outcome combination for the selected period.</div>';
-          return;
-        }
-
-        container.innerHTML = filtered.map(insight => `
-          <article class="insight-card">
-            <h3>${insight.title}</h3>
-            <p class="insight-text">${insight.insight}</p>
-            <div class="insight-block">
-              <p class="block-title">Root Cause</p>
-              <p>${insight.rootCause}</p>
-            </div>
-          </article>
-        `).join('');
+      function getScenarioKey(csat, resolution, process) {
+        return `${csat}-${resolution}-${process}`;
       }
 
-      // Set default active filter chips
-      document.querySelectorAll('.filter-chip').forEach(chip => {
-        const filterType = chip.dataset.filter;
-        const value = chip.dataset.value;
-        if (activeFilters[filterType] === value) {
-          chip.classList.add('active');
-        }
-      });
+      function renderDiagnostic(csat, resolution, process, percentageText) {
+        const key = getScenarioKey(csat, resolution, process);
+        const data = scenarioData[key];
+        if (!data) return;
 
-      document.querySelectorAll('.filter-chip').forEach(chip => {
-        chip.addEventListener('click', function() {
-          const filterType = this.dataset.filter;
-          const value = this.dataset.value;
+        const csatLabel = csat === 'positive' ? 'Positive' : csat === 'neutral' ? 'Neutral' : 'Negative';
+        const resolutionLabel = resolution === 'achieved' ? 'Resolution Achieved' : 'Resolution Not Achieved';
+        const processLabel = process === 'followed' ? 'Process Followed' : 'Process Not Followed';
+
+        // Extract percentage from text (e.g., "18%" -> 18)
+        const percentage = parseFloat(percentageText.replace('%', ''));
+        
+        // Total weekly calls (demo data)
+        const totalWeeklyCalls = 1000;
+        
+        // Calculate number of calls in this bucket
+        const callsInBucket = Math.round((percentage / 100) * totalWeeklyCalls);
+
+        // Update modal title
+        const modalTitle = document.getElementById('modalTitle');
+        modalTitle.textContent = `Diagnostic Insights: ${csatLabel} CSAT | ${resolutionLabel} | ${processLabel}`;
+
+        // Update diagnostic content with stats AND diagnostic questions
+        const diagnosticSection = document.getElementById('diagnosticSection');
+        diagnosticSection.innerHTML = `
+          <div class="matrix-stats">
+            <div class="stat-item">
+              <p class="stat-label">Percentage</p>
+              <p class="stat-value-large">${percentageText}</p>
+            </div>
+            <div class="stat-item">
+              <p class="stat-label">Number of Calls in Bucket</p>
+              <p class="stat-value-large">${callsInBucket.toLocaleString()}</p>
+            </div>
+            <div class="stat-item">
+              <p class="stat-label">Total Weekly Calls</p>
+              <p class="stat-value-large">${totalWeeklyCalls.toLocaleString()}</p>
+            </div>
+          </div>
+
+          <div class="diagnostic-questions">
+            <div class="diagnostic-question">
+              <h4>1. Why is customer experience ${csatLabel} in this scenario?</h4>
+              <div class="insight-block">
+                <p>${data.whyCSAT}</p>
+              </div>
+            </div>
+
+            <div class="diagnostic-question">
+              <h4>2. What were customers contacting about?</h4>
+              <div class="insight-block">
+                <p><strong>Contact types:</strong> ${data.contactingAbout}</p>
+                <p style="margin-top: 12px;"><strong>Stanley product types:</strong> ${data.productTypes}</p>
+              </div>
+            </div>
+
+            <div class="diagnostic-question">
+              <h4>3. What could have been done better to achieve a better customer outcome?</h4>
+              <div class="insight-block">
+                <p>${data.couldBeBetter}</p>
+              </div>
+            </div>
+
+            <div class="diagnostic-question">
+              <h4>4. What actions should be taken to improve and prevent these contacts in the future?</h4>
+              <div class="insight-block">
+                <p class="block-title">Contact-Centre Actions</p>
+                <ul>
+                  ${data.contactCentreActions.map(action => `<li>${action}</li>`).join('')}
+                </ul>
+                <p class="block-title" style="margin-top: 16px;">Prevention Actions</p>
+                <ul>
+                  ${data.preventionActions.map(action => `<li>${action}</li>`).join('')}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Show modal
+        const modal = document.getElementById('diagnosticModal');
+        modal.style.display = 'flex';
+      }
+
+      // Add click handlers to matrix cells
+      document.querySelectorAll('.matrix-cell[data-csat]').forEach(cell => {
+        cell.addEventListener('click', function() {
+          // Remove active class from all cells
+          document.querySelectorAll('.matrix-cell').forEach(c => c.classList.remove('active'));
           
-          if (activeFilters[filterType] === value) {
-            activeFilters[filterType] = null;
-            this.classList.remove('active');
-          } else {
-            document.querySelectorAll(`[data-filter="${filterType}"]`).forEach(c => c.classList.remove('active'));
-            activeFilters[filterType] = value;
-            this.classList.add('active');
-          }
+          // Add active class to clicked cell
+          this.classList.add('active');
           
-          renderInsights();
+          // Get cell data
+          const csat = this.dataset.csat;
+          const resolution = this.dataset.resolution === 'achieved' ? 'achieved' : 'not_achieved';
+          const process = this.dataset.process === 'followed' ? 'followed' : 'not_followed';
+          
+          // Get percentage from the cell
+          const percentageElement = this.querySelector('.cell-percentage');
+          const percentageText = percentageElement ? percentageElement.textContent : '0%';
+          
+          renderDiagnostic(csat, resolution, process, percentageText);
         });
       });
 
-      renderInsights();
+      // Close modal handlers
+      const modal = document.getElementById('diagnosticModal');
+      const closeBtn = document.getElementById('closeDiagnosticModal');
+
+      closeBtn.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+
+      // Close modal when clicking outside
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          modal.style.display = 'none';
+        }
+      });
+
+      // Close modal with Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+          modal.style.display = 'none';
+        }
+      });
     })();
   </script>
 </body>

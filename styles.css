@@ -435,7 +435,8 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(2px);
   z-index: 1000;
   align-items: center;
   justify-content: center;
@@ -448,8 +449,9 @@ body {
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
   position: relative;
+  border: 1px solid var(--border);
 }
 .modal-header {
   padding: 24px;
@@ -545,6 +547,253 @@ body {
 @media (max-width: 600px) {
   .modal-kpis {
     grid-template-columns: 1fr;
+  }
+}
+
+/* CSAT × Outcome Matrix Styles */
+.matrix-container {
+  margin: 16px 0;
+  overflow-x: auto;
+}
+
+.matrix-table {
+  display: grid;
+  grid-template-columns: 200px repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.matrix-header {
+  display: contents;
+}
+
+.matrix-row {
+  display: contents;
+}
+
+.matrix-cell {
+  background: var(--card);
+  padding: 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.2s;
+  cursor: pointer;
+  min-height: 60px;
+}
+
+.matrix-cell.header-cell {
+  background: #f8fafc;
+  font-weight: 700;
+  color: var(--text);
+  cursor: default;
+  border-bottom: 2px solid var(--border);
+}
+
+.matrix-cell.header-cell:first-child {
+  border-right: 2px solid var(--border);
+}
+
+.matrix-cell.header-negative {
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.matrix-cell.header-neutral {
+  background: #fffbeb;
+  color: #92400e;
+}
+
+.matrix-cell.header-positive {
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.header-sub {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.matrix-cell.row-label {
+  background: #f8fafc;
+  font-weight: 600;
+  text-align: left;
+  justify-content: flex-start;
+  padding-left: 16px;
+  cursor: default;
+  border-right: 2px solid var(--border);
+  line-height: 1.4;
+}
+
+.matrix-cell[data-csat] {
+  position: relative;
+}
+
+/* Color code CSAT columns */
+.matrix-cell[data-csat="negative"] {
+  background: #fef2f2;
+  border-left: 3px solid #dc2626;
+}
+
+.matrix-cell[data-csat="neutral"] {
+  background: #fffbeb;
+  border-left: 3px solid #f59e0b;
+}
+
+.matrix-cell[data-csat="positive"] {
+  background: #f0fdf4;
+  border-left: 3px solid #10b981;
+}
+
+.matrix-cell[data-csat]:hover {
+  transform: scale(1.02);
+  z-index: 1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.matrix-cell[data-csat="negative"]:hover {
+  background: #fee2e2;
+}
+
+.matrix-cell[data-csat="neutral"]:hover {
+  background: #fef3c7;
+}
+
+.matrix-cell[data-csat="positive"]:hover {
+  background: #dcfce7;
+}
+
+.matrix-cell[data-csat].active {
+  color: #fff;
+  border: 2px solid var(--primary);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  z-index: 2;
+}
+
+.matrix-cell[data-csat="negative"].active {
+  background: #dc2626;
+}
+
+.matrix-cell[data-csat="neutral"].active {
+  background: #f59e0b;
+}
+
+.matrix-cell[data-csat="positive"].active {
+  background: var(--primary);
+}
+
+.cell-percentage {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.matrix-cell.active .cell-percentage {
+  color: #fff;
+}
+
+/* Diagnostic Content Styles (for modal) */
+.diagnostic-content {
+  display: grid;
+  gap: 24px;
+}
+
+.matrix-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 24px;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.stat-item .stat-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.stat-item .stat-value-large {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--primary);
+  margin: 0;
+}
+
+.diagnostic-questions {
+  display: grid;
+  gap: 24px;
+}
+
+.diagnostic-question {
+  display: grid;
+  gap: 10px;
+}
+
+.diagnostic-question h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.diagnostic-question .insight-block {
+  margin-top: 4px;
+}
+
+.diagnostic-question .insight-block p {
+  color: #374151;
+  line-height: 1.6;
+}
+
+.diagnostic-question .insight-block ul {
+  margin-top: 8px;
+}
+
+@media (max-width: 600px) {
+  .matrix-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .matrix-table {
+    grid-template-columns: 150px repeat(3, 1fr);
+    font-size: 12px;
+  }
+  
+  .matrix-cell {
+    padding: 12px 8px;
+    min-height: 50px;
+  }
+  
+  .cell-percentage {
+    font-size: 16px;
+  }
+  
+  .matrix-cell.row-label {
+    padding-left: 12px;
+    font-size: 12px;
   }
 }
 
